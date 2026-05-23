@@ -9,7 +9,7 @@ Usage:
     python Xbox360Controller2MIDI.py              # auto-selects first MIDI output
     python Xbox360Controller2MIDI.py --list-ports # print available MIDI output ports
 
-MIDI mapping (hardcoded – edit the constants below):
+MIDI mapping (hardcoded - edit the constants below):
   Joystick axes  →  CC messages    (axis float -1…+1  mapped to  0…127)
   Buttons        →  NoteOn / NoteOff
   D-pad          →  NoteOn / NoteOff
