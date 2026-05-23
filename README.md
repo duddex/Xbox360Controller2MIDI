@@ -2,6 +2,8 @@
 
 A Python script that reads an Xbox 360 (or compatible) gamecontroller and translates its inputs into MIDI messages in real time. A live pygame window visualizes the current state of every button, stick, trigger, and D-pad direction.
 
+**Note**: this Python script and the README were created using Github Copilot
+
 ---
 
 ## Requirements
