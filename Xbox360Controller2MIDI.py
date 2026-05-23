@@ -124,7 +124,11 @@ class GameController2Midi:
     def __init__(self, port_name: str | None = None):
         # Allow joystick input even when this window does not have focus.
         os.environ['SDL_JOYSTICK_ALLOW_BACKGROUND_EVENTS'] = '1'
-        pygame.init()
+        # Initialise only the modules we need — deliberately skipping
+        # pygame.midi so it does not claim the Windows MM MIDI port
+        # before mido/rtmidi can open it.
+        pygame.display.init()
+        pygame.font.init()
         pygame.joystick.init()
 
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT), pygame.RESIZABLE)
@@ -550,7 +554,27 @@ def main():
             print("No MIDI output ports found.")
         return
 
-    app = GameController2Midi(port_name=args.port)
+    port_name = args.port
+    if port_name is None:
+        ports = mido.get_output_names()
+        if not ports:
+            print("[MIDI] No output ports found — MIDI disabled.")
+        elif len(ports) == 1:
+            port_name = ports[0]
+            print(f"[MIDI] Only one port available, auto-selecting: {port_name}")
+        else:
+            print("Available MIDI output ports:")
+            for i, p in enumerate(ports):
+                print(f"  [{i}] {p}")
+            while True:
+                try:
+                    choice = input(f"Select MIDI port [0-{len(ports)-1}]: ").strip()
+                    port_name = ports[int(choice)]
+                    break
+                except (ValueError, IndexError):
+                    print(f"  Please enter a number between 0 and {len(ports)-1}.")
+
+    app = GameController2Midi(port_name=port_name)
     app.run()
 
 
