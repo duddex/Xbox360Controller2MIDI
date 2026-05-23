@@ -24,8 +24,11 @@ except ImportError:
     print("ERROR: 'mido' is not installed.  Run:  pip install mido python-rtmidi")
     sys.exit(1)
 
-import pygame
-
+try:
+    import pygame
+except ImportError:
+    print("ERROR: 'pygame' is not installed.  Run:  pip install pygame")
+    sys.exit(1)
 
 # ---------------------------------------------------------------------------
 # Window / display
