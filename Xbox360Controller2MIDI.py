@@ -107,6 +107,16 @@ AXIS_CC = {
 
 
 # ---------------------------------------------------------------------------
+# MIDI note name helper
+# ---------------------------------------------------------------------------
+_NOTE_NAMES = ("C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B")
+
+def midi_note_name(note: int) -> str:
+    """Convert a MIDI note number (0-127) to a human-readable name, e.g. 60 → 'C4'."""
+    return f"{_NOTE_NAMES[note % 12]}{(note // 12) - 1}"
+
+
+# ---------------------------------------------------------------------------
 # Controller state
 # ---------------------------------------------------------------------------
 class ControllerState:
@@ -321,7 +331,7 @@ class GameController2Midi:
         val = self.font_small.render(f"x {value_x:+.2f}  y {value_y:+.2f}", True, MUTED)
         self.screen.blit(val, (cx - val.get_width() // 2, cy + outer_r + gap + lineh))
         if note is not None:
-            note_surf = self.font_small.render(f"note {note}", True, MUTED)
+            note_surf = self.font_small.render(f"Button: {midi_note_name(note)}", True, MUTED)
             self.screen.blit(note_surf, (cx - note_surf.get_width() // 2, cy + outer_r + gap + lineh * 2))
 
     def _draw_trigger(self, bx, by, bw, bh, value, label):
@@ -348,7 +358,7 @@ class GameController2Midi:
         txt = self.font_small.render(label, True, BG if pressed else TEXT)
         self.screen.blit(txt, (cx - txt.get_width() // 2, cy - txt.get_height() // 2))
         if note is not None:
-            note_surf = self.font_small.render(str(note), True, MUTED)
+            note_surf = self.font_small.render(midi_note_name(note), True, MUTED)
             self.screen.blit(note_surf, (cx - note_surf.get_width() // 2, cy + r + self._sp(4)))
 
     def _draw_dpad(self, cx, cy, hat, dir_notes=None):
@@ -368,10 +378,11 @@ class GameController2Midi:
         lbl = self.font_small.render("D-PAD", True, MUTED)
         self.screen.blit(lbl, (cx - lbl.get_width() // 2, cy + arm + gap + self._sp(6)))
         if dir_notes:
-            note_line = (f"U:{dir_notes.get(( 0, 1),'-')} "
-                         f"D:{dir_notes.get(( 0,-1),'-')} "
-                         f"L:{dir_notes.get((-1, 0),'-')} "
-                         f"R:{dir_notes.get(( 1, 0),'-')}")
+            def _dn(v): return midi_note_name(v) if v != '-' else '-'
+            note_line = (f"U:{_dn(dir_notes.get(( 0, 1),'-'))} "
+                         f"D:{_dn(dir_notes.get(( 0,-1),'-'))} "
+                         f"L:{_dn(dir_notes.get((-1, 0),'-'))} "
+                         f"R:{_dn(dir_notes.get(( 1, 0),'-'))}")
             note_surf = self.font_small.render(note_line, True, MUTED)
             self.screen.blit(note_surf, (cx - note_surf.get_width() // 2, cy + arm + gap + self._sp(28)))
 
