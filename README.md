@@ -222,8 +222,8 @@ Each entry maps an **axis name** to a MIDI CC number (0–127). To route the lef
 The visualizer window shows:
 
 - **Controller body** with all buttons, sticks, triggers, and D-pad highlighted when active.
-- **MIDI note number** shown below each button and below each stick (for the stick-click note).
-- **D-pad note numbers** shown below the D-PAD label (`U:xx D:xx L:xx R:xx`).
+- **MIDI note name** shown below each button and below each stick (for the stick-click note, prefixed with `Button:`).
+- **D-pad note names** shown below the D-PAD label (`U:xx D:xx L:xx R:xx`).
 - **Status bar** (top): connected controller name on the left, active MIDI port on the right.
 - **Axes table** (bottom left): raw axis float values.
 - **CC Sent table** (bottom right): live quantised CC values currently being sent (`LX, LY, RX, RY` then `LT, RT`).
